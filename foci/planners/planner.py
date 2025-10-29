@@ -49,7 +49,7 @@ class Planner():
 
     def plan(self,start_pos, end_pos):
 
-        init_guess = astar_path_spline_fit( start_pos, end_pos, self.obstacle_positions, num_control_points=self.num_control_points, voxel_size=0.25, z_range=(0,1)) 
+        init_guess = astar_path_spline_fit( start_pos, end_pos, self.obstacle_positions, num_control_points=self.num_control_points, voxel_size=0.25, z_range=(0,10)) 
 
         spline = spline_eval((init_guess.reshape(4, self.num_control_points)).T, self.num_samples)
 

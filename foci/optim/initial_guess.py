@@ -59,7 +59,7 @@ class BasicAStar(AStar):
     
 
 
-def astar_path_spline_fit(start_point, end_point, means, voxel_size = 1.0, num_control_points=20, z_range = None):
+def astar_path_spline_fit(start_point, end_point, means, voxel_size = 1.0, num_control_points=20, z_range = (0, 10)):
     min_x = min(means[:,0].min(), start_point[0], end_point[0])
     max_x = max(means[:,0].max(), start_point[0], end_point[0])
     min_y = min(means[:,1].min(), start_point[1], end_point[1])
