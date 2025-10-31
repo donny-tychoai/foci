@@ -13,9 +13,6 @@ from foci.optim.solvers import create_solver
 from scipy.spatial.transform import Rotation as R
 from sklearn.preprocessing import normalize
 
-
-
-
 class Planner():
     def __init__(self, obstacle_positions, obstacle_covs, robot_cov, num_control_points, num_samples, obstacle_colors = None):  
 
@@ -52,7 +49,7 @@ class Planner():
         init_guess = astar_path_spline_fit( start_pos, end_pos, self.obstacle_positions, num_control_points=self.num_control_points, voxel_size=0.25, z_range=(0,10)) 
 
         spline = spline_eval((init_guess.reshape(4, self.num_control_points)).T, self.num_samples)
-
+    
         astar_length = 0
         for i in range(1, self.num_samples):
             astar_length += np.linalg.norm(spline[i,:3] - spline[i-1,:3])

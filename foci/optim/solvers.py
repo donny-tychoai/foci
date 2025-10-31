@@ -137,7 +137,6 @@ def create_solver(num_control_points,
                 lbg = np.concatenate((lbg, [z_range[0]]))
                 ubg = np.concatenate((ubg, [z_range[1]]))
 
-            
     # velocity constraints =================================
     # for i in range(curve.shape[0]):
     #     cons = cas.vertcat(cons, dcurve[i,0] ** 2 + dcurve[i,1] ** 2 + dcurve[i,2] ** 2)
@@ -186,7 +185,7 @@ def create_solver(num_control_points,
     # define optimization solver
     nlp = {"x": dec_vars, "f": cost, "p": params, "g": cons}
     ipopt_options = {"ipopt.print_level": 5,
-                    "ipopt.max_iter":500, 
+                    "ipopt.max_iter":1000, 
                     "ipopt.tol": 1e-1, 
                     "print_time": 0, 
                     "ipopt.acceptable_tol": 1e-1, 

@@ -39,10 +39,9 @@ means, covs, colors, opacities = extract_splat_data(ply_file)
 means = 20 * means
 covs = 20**2 * covs
 
-radius = max(np.linalg.norm(means, axis=1)) * 1.02
-robot_cov = np.eye(3) * 0.01
+robot_cov = np.eye(3) * 0.001
 
-planner = Planner(means, covs, robot_cov, num_control_points=10, num_samples=40) 
+planner = Planner(means, covs, robot_cov, num_control_points=5, num_samples=30) 
 
 # Load transformations
 # NOTE: The path to the YAML config is still hardcoded. If this fails, it needs to be updated too.
@@ -55,8 +54,7 @@ except FileNotFoundError:
 
 dp_transform = np.array(yaml_obj["dataparser_transform"])
 dp_scale = yaml_obj["dataparser_scale"]
-inv_dp_transform = np.linalg.inv(dp_transform) # Pre-calculate inverse
-
+inv_dp_transform = np.linalg.inv(dp_transform)
 def transform_waypoint_to_relative_frame(waypoint_ned):
     """
     Transforms a waypoint from the original frame (assuming NED) to the 
@@ -92,29 +90,18 @@ for wp_ned in gt_ned_waypoints:
 print("INFO: Waypoints to plan:")
 print(points_relative_frame)
 
-# ============================== Plan in Relative Frame ==============================
 solutions = []
 for i in range(len(points_relative_frame) - 1):
     print(f"Planning segment {i+1}/{len(points_relative_frame) - 1}...")
     opt_curve, astar = planner.plan(points_relative_frame[i], points_relative_frame[i+1])
     solutions.append((opt_curve, astar))
 
-# ============================== Untransform solutions into original frame ==============================
 astar_original_frame = []
 for sol in solutions:
-    # sol[0] is the optimal curve
-    for point in sol[0]:
-        
-        # 1. Scale Down: P_relative / (20 * dp_scale)
+    for point in sol[1]:
         scaled_point = np.array(point[:3]) / (20 * dp_scale) 
-        
-        # 2. Apply inv_dp_transform: P_global = inv(dp_transform) @ scaled_point
-        # Convert to homogeneous and apply inv_dp_transform
         global_point_h = inv_dp_transform @ np.append(scaled_point, 1)
-        
-        # Extract (x, y, z) and convert to list
         astar_original_frame.append(global_point_h[:3].tolist())
-
 
 astar_original_frame_ned = [(y, x, -z) for (x, y, z) in astar_original_frame]
 
@@ -126,6 +113,7 @@ output_path = os.path.join("/workspace", OUTPUT_FILENAME)
 with open(output_path, 'w') as f:
     json.dump(astar_original_frame_ned, f)
 print(f"Saved planned path to {output_path}")
+
 
 ## Viser visualization
 vis = ViserVis()

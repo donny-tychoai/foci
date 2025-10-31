@@ -18,49 +18,51 @@ dataparser_transform:
   - 0.0
   - 1.0
 path_1:
-  alt: -12
+  alt: &alt -12 # negative is up
   num_waypoints: 11
   waypoint0:
     x: -33.96
     y: -33.4
-    z: -12
+    z: *alt
   waypoint1:
     x: -6.67
     y: -48.66
-    z: -12
-  waypoint10:
-    x: -33.96
-    y: -33.4
-    z: -12
+    z: *alt
   waypoint2:
     x: 12.28
     y: -92.43
-    z: -12
+    z: *alt
+  # tree line
   waypoint3:
     x: 60.38
     y: -198.78
-    z: -12
+    z: *alt
   waypoint4:
     x: 27.94
     y: -263.51
-    z: -12
+    z: *alt
   waypoint5:
     x: -4.85
     y: -270.8
-    z: -12
+    z: *alt
   waypoint6:
     x: -36.8
     y: -273.51
-    z: -12
+    z: *alt
   waypoint7:
     x: -46.29
     y: -208.57
-    z: -12
+    z: *alt
   waypoint8:
     x: -55.28
     y: -129.96
-    z: -12
+    z: *alt
   waypoint9:
     x: -55.09
     y: -54.35
-    z: -12
+    z: *alt
+  waypoint10:
+    x: -33.96
+    y: -33.4
+    z: *alt
+
